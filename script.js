@@ -36,8 +36,25 @@ const checkWin = () => {
             document.querySelector('.imgbox').getElementsByTagName('img')[0].style.width = "200px";
             document.querySelector(".line").style.transform = `translate(${e[3]}vw, ${e[4]}vw) rotate(${e[5]}deg)`;
             document.querySelector(".line").style.width = "20vw";
+            gameover.play();
         }
     });
+};
+
+// Function to check for draw
+const checkDraw = () => {
+    let isDraw = true;
+    let boxtexts = document.querySelectorAll('.boxtext');
+    boxtexts.forEach(box => {
+        if (box.innerText === '') {
+            isDraw = false;
+        }
+    });
+    if (isDraw && !isgameover) {
+        document.querySelector('.info').innerText = "It's a Draw!";
+        gameover.play();
+        isgameover = true;
+    }
 };
 
 // Start Game Logic (Submit Names)
@@ -52,7 +69,8 @@ document.getElementById("startGame").addEventListener("click", () => {
     document.querySelector(".inputSection").style.display = "none";
 });
 
-// Main Game Logic
+// Game Logic
+// music.play()
 let boxes = document.getElementsByClassName("box");
 Array.from(boxes).forEach(element => {
     let boxtext = element.querySelector('.boxtext');
@@ -63,6 +81,8 @@ Array.from(boxes).forEach(element => {
             turn = changeTurn();
             audioTurn.play();
             checkWin();
+
+            checkDraw();
             if (!isgameover) {
                 document.getElementsByClassName("info")[0].innerText = "Turn for " + (turn === "X" ? player1 : player2);
             }
